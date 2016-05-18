@@ -3,6 +3,7 @@
 @moduleauthor:: Juan P. Murcia <jumu@dtu.dk>
 
 """
+
 import numpy as np
 try:
     import scipy as sp
@@ -39,7 +40,8 @@ class WindTurbine(object):
         self.H = H
         self.R = R
 
-        refCurvesArray=np.loadtxt(refCurvesFile,delimiter=', ',skiprows=5)
+        #refCurvesArray=np.loadtxt(refCurvesFile,delimiter=', ',skiprows=5)
+        refCurvesArray=np.loadtxt(refCurvesFile,delimiter=' ',skiprows=0)
 
         self.refCurvesArray = refCurvesArray
 
