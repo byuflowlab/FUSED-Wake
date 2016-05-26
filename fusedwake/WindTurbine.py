@@ -3,7 +3,6 @@
 @moduleauthor:: Juan P. Murcia <jumu@dtu.dk>
 
 """
-
 import numpy as np
 try:
     import scipy as sp
@@ -40,8 +39,10 @@ class WindTurbine(object):
         self.H = H
         self.R = R
 
+        #CHANGE : WindTurbine class accepts array as input instead of .txt file
         #refCurvesArray=np.loadtxt(refCurvesFile,delimiter=', ',skiprows=5)
-        refCurvesArray=np.loadtxt(refCurvesFile,delimiter=' ',skiprows=0)
+        #refCurvesArray=np.loadtxt(refCurvesFile,delimiter=' ',skiprows=0)
+        refCurvesArray = refCurvesFile
 
         self.refCurvesArray = refCurvesArray
 
@@ -56,7 +57,6 @@ class WindTurbine(object):
         self.u_cutin = self.ref_u[0]
         self.u_cutout = self.ref_u[-1]
         self.P_rated = np.max(self.ref_P)
-
         self.PCI = interpolator(self.ref_u, self.ref_P)
         self.CTCI = interpolator(self.ref_u, self.ref_CT)
 

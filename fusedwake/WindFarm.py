@@ -34,7 +34,8 @@ class WindTurbineList(list):
 
 
 class WindFarm(object):
-    def __init__(self, name=None, yml=None, coordFile=None, WT=None):
+    def __init__(self, name=None, yml=None, coordFile=None, array=None, WT=None):
+    #def __init__(self, name, yml=None, coordFile, WT):
         """Initializes a WindFarm object.
         The initialization can be done using a `windIO` yml file or using a
         coodFile + WindTurbine instance.
@@ -50,21 +51,39 @@ class WindFarm(object):
         WindTurbine: WindTurbine, optional
             WindTurbine object (only one type per WindFarm)
         """
+
         if (coordFile):
             coordArray = np.loadtxt(coordFile)
             self.pos = coordArray.T  # np.array(2 x nWT)
+            self.pos = coordArray  # np.array(2 x nWT)
             self.nWT = self.pos.shape[1]
             self.WT = WindTurbineList([WT for i in range(self.nWT)])
             if name:
                 self.name = name
             else:
                 self.name = 'Unknown wind farm'
+        elif (yml and array.any()):
+            self.wf = WTLayout(yml)
+            #self.pos = self.wf.positions.T
+            self.pos = array  # np.array(2 x nWT)
+            self.nWT = self.pos.shape[1]
+            self.WT = WindTurbineList([WindTurbineDICT(wt, self.wf[wt['turbine_type']]) for wt in self.wf.wt_list])
+            self.name = self.wf.name
+            print self.pos
+
         elif (yml):
             self.wf = WTLayout(yml)
             self.pos = self.wf.positions.T
             self.nWT = self.pos.shape[1]
             self.WT = WindTurbineList([WindTurbineDICT(wt, self.wf[wt['turbine_type']]) for wt in self.wf.wt_list])
             self.name = self.wf.name
+        elif (array.any()):
+            coordArray = array
+            self.pos = coordArray  # np.array(2 x nWT)
+            self.nWT = self.pos.shape[1]
+            self.WT = WindTurbineList([WT for i in range(self.nWT)])
+            print self.pos
+
         # We generate a wind turbine list
 
         # XYZ position of the rotors
@@ -111,6 +130,7 @@ class WindFarm(object):
         ID0 = np.argsort(nDownstream)
         return distFlowCoord, nDownstream, ID0
 
+
     def toFlowCoord(self, wd, vect):
         """Rotates a 2xN np.array to flow coordinates
 
@@ -129,6 +149,7 @@ class WindFarm(object):
         angle = np.radians(270.-wd)
         ROT = np.array([[np.cos(angle), np.sin(angle)],
                         [-np.sin(angle), np.cos(angle)]])
+
         return np.dot(ROT, vect)
 
 
@@ -177,6 +198,7 @@ class WindFarm(object):
 
         """
         x_g, y_g, z_g = self.vectWTtoWT
+        #print x_g[0,1]
         return x_g, y_g, z_g
 
 

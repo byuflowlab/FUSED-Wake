@@ -54,6 +54,7 @@ class GCL(object):
         # Preparing for the inputs for the fortran version
         if 'WF' in dic:
             self.x_g, self.y_g, self.z_g = self.WF.get_T2T_gl_coord2()
+            print self.x_g[0,1]
             self.dt = self.WF.rotor_diameter
             self.p_c = self.WF.power_curve
             self.ct_c = self.WF.c_t_curve
