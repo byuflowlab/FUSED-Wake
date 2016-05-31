@@ -1,10 +1,7 @@
 """GC Larsen wake model applied to offshore wind farms (WindFarm object)
-
 @moduleauthor:: Juan P. Murcia <jumu@dtu.dk>
-
 References:
 [1] Larsen GC. "A simple stationary semi-analytical wake model", 2009
-
 """
 import numpy as np
 import fusedwake.WindTurbine as wt
@@ -12,10 +9,8 @@ import fusedwake.WindFarm as wf
 
 def Ua(r,te,zc,us,z0):
     """Function of undisturbed inflow wind speed - log law.
-
     .. math::
         U_a = \\frac{u^*}{\\kappa} \\ln \\left( \\frac{ z_c + r \\sin (te)) }{ z_0 } \\right)
-
     Parameters
     ----------
     r: np.array, float
@@ -28,7 +23,6 @@ def Ua(r,te,zc,us,z0):
         Friction velocity [m/s]
     z0: float
         Roughness height [m]
-
     Returns
     -------
     Ua: np.array, float
@@ -39,10 +33,8 @@ def Ua(r,te,zc,us,z0):
 
 def Ua_shear(r,te,zc,uH,alpha):
     """Function of undisturbed inflow wind speed - power law.
-
     .. math::
         U_a = u_H \\left(\\frac{z_c + r \\sin(te) }{ z_c } \\right)^\\alpha
-
     Parameters
     ----------
     r: np.array, float
@@ -55,7 +47,6 @@ def Ua_shear(r,te,zc,uH,alpha):
         Wind Speed at Hub Height [m/s]
     alpha: float
         Shear Coefficient [-]
-
     Returns
     -------
     Ua: np.array, float
@@ -68,7 +59,6 @@ def Ua_shear(r,te,zc,uH,alpha):
 def gaussN(R, func, varargin, NG=4):
     """Calculate numerically the gauss integration.
     [1] eq. 38
-
     Parameters
     ----------
     R: float
@@ -78,7 +68,6 @@ def gaussN(R, func, varargin, NG=4):
     varargin: Other arguments for the function besides [r,te]
     NG: int
         Number of Ga
-
     Returns
     -------
     Ua: float
@@ -103,10 +92,8 @@ def gaussN(R, func, varargin, NG=4):
 
 def get_r96(D, CT, TI, pars=[0.435449861, 0.797853685, -0.124807893, 0.136821858, 15.6298, 1.0]):
     """Computes the wake radius at 9.6D downstream location of a turbine
-
     .. math::
         R_{9.6D} = a_1 \\exp (a_2 C_T^2 + a_3 C_T + a_4)  (b_1  TI + b_2)  D
-
     Parameters
     ----------
     D: float
@@ -117,7 +104,6 @@ def get_r96(D, CT, TI, pars=[0.435449861, 0.797853685, -0.124807893, 0.136821858
         Ambient turbulence intensity
     pars: list
         GCL Model parameters [a1, a2, a3, a4, b1, b2]
-
     Returns
     -------
     R96: float
@@ -131,26 +117,18 @@ def get_r96(D, CT, TI, pars=[0.435449861, 0.797853685, -0.124807893, 0.136821858
 def get_Rw(x, R, TI, CT, pars=[0.435449861, 0.797853685, -0.124807893, 0.136821858, 15.6298, 1.0]):
     """Computes the wake radius at a location.
     [1]-eq.3
-
     .. math::
         R_w = \\left(\\frac{105  c_1^2 }{2 \\pi}\\right)^{0.2} (C_T A (x + x_0))^{1/3}
-
     with A, the area, and x_0 and c_1 defined as
-
     .. math::
         x_0 = \\frac{9.6 D}{\\left(\\frac{2 R_96}{k D} \\right)^3 - 1}
-
         c_1 = \\left(\\frac{k D}{2}\\right)^{5/2}
               \\left(\\frac{105}{2 \\pi} \\right)^{-1/2}
               (C_T A x_0)^{-5/6}
-
     with k and m defined as
-
     .. math::
         k = \\sqrt{\\frac{m + 1}{2}}
-
         m = \\frac{1}{\\sqrt{1 - C_T}}
-
     Parameters
     ----------
     x: float or ndarray
@@ -161,7 +139,6 @@ def get_Rw(x, R, TI, CT, pars=[0.435449861, 0.797853685, -0.124807893, 0.1368218
         Ambient turbulence intensity
     CT: float
         Outputs WindTurbine object's thrust coefficient
-
     Returns
     -------
     Rw: float or ndarray
@@ -192,7 +169,6 @@ def get_dU(x,r,Rw,U,R,TI,CT,
     order=1,
     pars=[0.435449861,0.797853685,-0.124807893,0.136821858,15.6298,1.0]):
     """Computes the wake velocity deficit at a location
-
     Parameters
     ----------
     x: float
@@ -210,7 +186,6 @@ def get_dU(x,r,Rw,U,R,TI,CT,
     CT: float
         Outputs WindTurbine object's thrust coefficient
     order: int, optional
-
     Returns
     -------
     dU: float
@@ -292,7 +267,6 @@ def GCLarsen_v0(WF, WS, WD, TI, z0, NG=4, sup='lin',
     pars=[0.435449861, 0.797853685, -0.124807893, 0.136821858, 15.6298, 1.0]):
     """Computes the WindFarm flow and Power using GCLarsen
     [Larsen, 2009, A simple Stationary...]
-
     Parameters
     ----------
     WF: WindFarm
@@ -313,8 +287,6 @@ def GCLarsen_v0(WF, WS, WD, TI, z0, NG=4, sup='lin',
         Wake velocity deficit superposition method:
             'lin': Linear superposition
             'quad' Quadratic superposition
-
-
     Returns
     -------
     P_WT: ndarray
@@ -388,7 +360,6 @@ def GCLarsen(WF, WS, WD,TI,
     pars=[0.435449861,0.797853685,-0.124807893,0.136821858,15.6298,1.0]):
     """Computes the WindFarm flow and Power using GCLarsen
     [Larsen, 2009, A simple Stationary...]
-
     Parameters
     ----------
     WF: WindFarm
@@ -416,7 +387,6 @@ def GCLarsen(WF, WS, WD,TI,
         Wake velocity deficit superposition method:
             'lin': Linear superposition
             'quad' Quadratic superposition
-
     Returns
     -------
     P_WT: ndarray
@@ -462,7 +432,7 @@ def GCLarsen(WF, WS, WD,TI,
     ID_wake = {i:(get_Rw(x=distFlowCoord[0,i,:],                # streamwise distance
                          R=WF.WT[i].R,                          # Upstream radius
                          TI=TI,
-                         CT=0.9,                                #Maximum effect
+                         CT=0.99,                                #Maximum effect
                          pars=pars)
                         > np.abs(distFlowCoord[1,i,:]) + allR).nonzero()[0]
                for i in id0}
@@ -537,7 +507,6 @@ def GCL_P_GaussQ_Norm_U_WD(WF, WS, meanWD, stdWD, NG_P, TI,
     """Computes the Gaussian quadrature average of GCLarsen
     power/WS prediction under normally distributed wind direction
     uncertainty inside the Reynolds averaging time
-
     Parameters
     ----------
     WF: WindFarm
@@ -574,7 +543,6 @@ def GCL_P_GaussQ_Norm_U_WD(WF, WS, meanWD, stdWD, NG_P, TI,
                 'quad' Quadratic superposition
     pars: list, optional
         GCL Model parameters
-
     Returns
     -------
     P_WT: ndarray
@@ -614,7 +582,6 @@ def GCL_P_GaussQ_Uni_U_WD(WF,WS,meanWD,U_WD,NG_P,TI,
     """Computes the Gaussian quadrature average of GCLarsen
     power/WS prediction under normally distributed wind direction
     uncertainty
-
     Parameters
     ----------
     WF: WindFarm
@@ -649,7 +616,6 @@ def GCL_P_GaussQ_Uni_U_WD(WF,WS,meanWD,U_WD,NG_P,TI,
         Wake velocity deficit superposition method:
                 'lin': Linear superposition
                 'quad' Quadratic superposition
-
     Returns
     -------
     P_WT: ndarray
@@ -699,11 +665,8 @@ print
 print gaussN(R=80.0, func=Ua, varargin=[80.0,15.0,1.0], NG=4)
 print
 print gaussN(R=80.0, func=dU4Gauss, varargin=[80.0,0.0,100.,100.0,8.0,80.,0.05,0.3], NG=4)
-
 v80 = wt.WindTurbine('Vestas v80 2MW offshore','V80_2MW_offshore.dat',70,40)
 HR1 = wf.WindFarm('Horns Rev 1','HR_coordinates.dat',v80)
-
 P_WT,U_WT = GCLarsen(WS=8.0,z0=0.0001,TI=0.05,WD=270,WF=HR1,NG=4,sup='quad',pars=[0.5,0.9,-0.124807893,0.136821858,15.6298,1.0])
 print P_WT
-
 '''

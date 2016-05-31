@@ -62,14 +62,13 @@ class WindFarm(object):
                 self.name = name
             else:
                 self.name = 'Unknown wind farm'
+        #TODO: fix so that this works if array is None
         elif (yml and array.any()):
             self.wf = WTLayout(yml)
-            #self.pos = self.wf.positions.T
             self.pos = array  # np.array(2 x nWT)
             self.nWT = self.pos.shape[1]
             self.WT = WindTurbineList([WindTurbineDICT(wt, self.wf[wt['turbine_type']]) for wt in self.wf.wt_list])
             self.name = self.wf.name
-            print self.pos
 
         elif (yml):
             self.wf = WTLayout(yml)
@@ -82,11 +81,12 @@ class WindFarm(object):
             self.pos = coordArray  # np.array(2 x nWT)
             self.nWT = self.pos.shape[1]
             self.WT = WindTurbineList([WT for i in range(self.nWT)])
-            print self.pos
+
 
         # We generate a wind turbine list
 
         # XYZ position of the rotors
+        #self.H = np.ones(self.nWT)*self.H[0]
         self.xyz = np.vstack([self.pos, self.H])
 
         # Vector from iWT to jWT: self.vectWTtoWT[:,i,j] [3, nWT, nWT]
