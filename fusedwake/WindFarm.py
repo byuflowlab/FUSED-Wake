@@ -62,8 +62,8 @@ class WindFarm(object):
                 self.name = name
             else:
                 self.name = 'Unknown wind farm'
-        #TODO: fix so that this works if array is None
-        elif (yml and array.any()):
+
+        elif (yml and array is not None):
             self.wf = WTLayout(yml)
             self.pos = array  # np.array(2 x nWT)
             self.nWT = self.pos.shape[1]
