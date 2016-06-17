@@ -197,13 +197,15 @@ class WindTurbineDICT(WindTurbine):
         self.PCI = interpolator(self.pc[:,0], self.pc[:,1]*self.power_factor)
         self.CTCI = interpolator(self.ctc[:,0], self.ctc[:,1])
 
-        index = np.nonzero(self.pc[:,1]*self.power_factor==self.P_rated)[0][0]
+        print self.P_rated
+        #quit()
+
+        index = 1.0 #np.nonzero(self.pc[:,1]*self.power_factor==self.P_rated)[0][0]
         self.PCI_u = interpolator(self.pc[:index+1,1] * self.power_factor, self.pc[:index+1,0])
         self.u_rated = wt_type['rated_wind_speed']
         self.refCurvesArray = np.vstack([self.pc[:,0].T,
                                          self.pc[:,1].T*self.power_factor,
                                          self.CTCI(self.pc[:,0].T)]).T
-
 
     def __getattr__(self, key):
         """Give access to a list of the properties of the turbine
