@@ -64,8 +64,8 @@ class WindFarm(object):
                 self.name = 'Unknown wind farm'
 
         elif (yml and array is not None):
-            #self.wf = WTLayout(yml)
-            self.wf = yml
+            self.wf = WTLayout(yml)
+            #self.wf = yml
             self.pos = array  # np.array(2 x nWT)
             self.nWT = self.pos.shape[1]
             self.WT = WindTurbineList([WindTurbineDICT(wt, self.wf[wt['turbine_type']]) for wt in self.wf.wt_list])
